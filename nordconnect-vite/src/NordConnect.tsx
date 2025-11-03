@@ -80,21 +80,24 @@ export default function NordConnect() {
           <div className="flex items-center gap-2">
             <Button variant="ghost" className="hidden md:inline-flex"><Bell className="h-4 w-4 mr-2"/>Varsler</Button>
             <Button><Globe className="h-4 w-4 mr-2"/>Logg inn med studentkonto</Button>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="md:hidden">Meny</Button>
-              </SheetTrigger>
-              <SheetContent>
-                <SheetHeader>
-                  <SheetTitle>NordConnect</SheetTitle>
-                </SheetHeader>
-                <div className="mt-6 grid gap-4">
-                  <a href="#about" className="hover:underline">Om</a>
-                  <a href="#how" className="hover:underline">Slik funker det</a>
-                  <a href="#rooms" className="hover:underline">Rom</a>
-                </div>
-              </SheetContent>
-            </Sheet>
+      {/* Mobilmeny – vises kun på små skjermer */}
+<div className="md:hidden">
+  <Sheet>
+    <SheetTrigger asChild>
+      <Button variant="outline">Meny</Button>
+    </SheetTrigger>
+    <SheetContent side="right">
+      <SheetHeader>
+        <SheetTitle>NordConnect</SheetTitle>
+      </SheetHeader>
+      <div className="mt-6 grid gap-4">
+        <a href="#about" className="hover:underline">Om</a>
+        <a href="#how" className="hover:underline">Slik funker det</a>
+        <a href="#rooms" className="hover:underline">Rom</a>
+      </div>
+    </SheetContent>
+  </Sheet>
+</div>
           </div>
         </div>
       </header>
