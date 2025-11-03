@@ -1,25 +1,46 @@
-import * as React from 'react'
+import * as React from "react";
 
-type DialogRootProps = React.PropsWithChildren<{ open?: boolean, onOpenChange?: (open:boolean)=>void }>
-export const Dialog: React.FC<DialogRootProps> = ({ children }) => <>{children}</>
+type DialogCtx = {
+  open: boolean;
+  setOpen: (v: boolean) => void;
+};
+const Ctx = React.createContext<DialogCtx | null>(null);
 
-export const DialogTrigger: React.FC<React.PropsWithChildren & { asChild?: boolean }> = ({ children }) => <>{children}</>
+type RootProps = React.PropsWithChildren<{
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}>;
 
-export const DialogContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className='', ...p }) => (
-  <div className={`fixed inset-0 z-50 grid place-items-center`}>
-    <div className="fixed inset-0 bg-black/30" />
-    <div className={`relative z-10 w-full max-w-lg rounded-2xl border bg-white p-4 shadow-xl ${className}`} {...p} />
-  </div>
-)
+/**
+ * Dialog-root. Kan brukes kontrollert (med open/onOpenChange) eller ukontrollert.
+ */
+export const Dialog: React.FC<RootProps> = ({ open, onOpenChange, children }) => {
+  const isControlled = typeof open === "boolean";
+  const [internal, setInternal] = React.useState(false);
+  const isOpen = isControlled ? (open as boolean) : internal;
 
-export const DialogHeader: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className='', ...p }) => (
-  <div className={`mb-2 ${className}`} {...p} />
-)
+  const setOpen = (v: boolean) => {
+    if (!isControlled) setInternal(v);
+    onOpenChange?.(v);
+  };
 
-export const DialogTitle: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className='', ...p }) => (
-  <div className={`text-lg font-semibold ${className}`} {...p} />
-)
+  // Lukk på Escape
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen]);
 
-export const DialogDescription: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className='', ...p }) => (
-  <div className={`text-sm text-slate-600 ${className}`} {...p} />
-)
+  return <Ctx.Provider value={{ open: isOpen, setOpen }}>{children}</Ctx.Provider>;
+};
+
+type TriggerProps = React.PropsWithChildren<{ asChild?: boolean }>;
+export const DialogTrigger: React.FC<TriggerProps> = ({ asChild, children }) => {
+  const ctx = React.useContext(Ctx);
+  if (!ctx) return <>{children}</>;
+
+  const child = React.Children.only(children) as React.ReactElement;
+  const on
