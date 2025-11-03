@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Coffee, BookOpen, Heart, MessageCircle, Users, Sparkles, MapPin, Shield,
-  Smile, PlayCircle, Bell, Mic, Video, Headphones, Search, Monitor, Globe, ChevronRight
+  Smile, PlayCircle, Bell, Mic, Video, Headphones, Search, Monitor, Globe, ChevronRight, Clock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,7 +32,7 @@ export default function NordConnect() {
   const [query, setQuery] = useState("");
   const [activeRoom, setActiveRoom] = useState<string | null>(null);
   const [joined, setJoined] = useState<string | null>(null);
-  const [notifications] = useState([
+  const [notifications] = useState<string[]>([
     "3 er i Kaffepraten nå – bli med!",
     "Fadder-kveld i Trivselsprat kl 19:30 i dag."
   ]);
@@ -66,44 +66,58 @@ export default function NordConnect() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
 
-      {/* Topplinje */}
+      {/* Topplinje – 3-kol grid for midtstilt meny */}
       <header className="sticky top-0 z-50 backdrop-blur bg-white/70 border-b">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
+          {/* Venstre: Logo */}
           <div className="flex items-center gap-3">
             <div className="h-9 w-9 rounded-2xl bg-blue-600 text-white grid place-items-center font-bold">NC</div>
             <span className="font-semibold">NordConnect</span>
             <Badge variant="secondary" className="ml-2">Beta</Badge>
           </div>
-          <nav className="hidden md:flex items-center gap-6 text-sm">
+
+          {/* Midt: Meny (midtstilt) */}
+          <nav className="hidden md:flex items-center gap-6 text-sm justify-center">
             <a href="#about" className="hover:underline">Om</a>
             <a href="#how" className="hover:underline">Slik funker det</a>
             <a href="#rooms" className="hover:underline">Rom</a>
           </nav>
 
-          {/* Mobilmeny */}
-          <div className="md:hidden">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline">Meny</Button>
-              </SheetTrigger>
-              <SheetContent side="right">
-                <SheetHeader>
-                  <SheetTitle>NordConnect</SheetTitle>
-                </SheetHeader>
-                <div className="mt-6 grid gap-4">
-                  <a href="#about" className="hover:underline">Om</a>
-                  <a href="#how" className="hover:underline">Slik funker det</a>
-                  <a href="#rooms" className="hover:underline">Rom</a>
-                </div>
-              </SheetContent>
-            </Sheet>
+          {/* Høyre: Aksjoner + Mobilmeny */}
+          <div className="flex items-center justify-end gap-2">
+            {/* Desktop-knapper */}
+            <Button variant="ghost" className="hidden md:inline-flex">
+              <Bell className="h-4 w-4 mr-2" /> Varsler
+            </Button>
+            <Button className="hidden md:inline-flex">
+              <Globe className="h-4 w-4 mr-2" /> Logg inn med studentkonto
+            </Button>
+
+            {/* Mobilmeny – kun små skjermer */}
+            <div className="md:hidden">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline">Meny</Button>
+                </SheetTrigger>
+                <SheetContent>
+                  <SheetHeader>
+                    <SheetTitle>NordConnect</SheetTitle>
+                  </SheetHeader>
+                  <div className="mt-6 grid gap-4">
+                    <a href="#about" className="hover:underline">Om</a>
+                    <a href="#how" className="hover:underline">Slik funker det</a>
+                    <a href="#rooms" className="hover:underline">Rom</a>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Hero */}
+      {/* Hero – tekst venstre, demo-panel høyre */}
       <section className="max-w-6xl mx-auto px-4 pt-12 pb-8">
-        <div className="grid md:grid-cols-2 gap-10 items-center">
+        <div className="grid md:grid-cols-2 gap-10 items-start">
           <div>
             <motion.h1 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
               className="text-3xl md:text-5xl font-bold leading-tight">
@@ -117,7 +131,47 @@ export default function NordConnect() {
               <Button size="lg"><PlayCircle className="h-5 w-5 mr-2" />Bli med nå</Button>
               <Button size="lg" variant="outline"><Monitor className="h-5 w-5 mr-2" />Se demo</Button>
             </div>
+
+            {/* Varsel-ticker */}
+            <div className="mt-6 flex items-center gap-2 text-sm text-slate-600">
+              <Clock className="h-4 w-4" />
+              <div className="overflow-x-auto whitespace-nowrap">
+                {notifications.map((n, i) => (
+                  <Badge key={i} variant="secondary" className="mr-2">{n}</Badge>
+                ))}
+              </div>
+            </div>
           </div>
+
+          {/* Demo-panel med romkort */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="bg-white rounded-2xl shadow-xl border p-4"
+          >
+            <div className="grid grid-cols-3 gap-3">
+              {rooms.slice(0, 6).map((r) => (
+                <Card key={r.id} className="hover:shadow-md transition">
+                  <CardHeader className="pb-2">
+                    <div className="flex items-center gap-2">
+                      <ActiveIcon Icon={r.icon} />
+                      <CardTitle className="text-base">{r.name}</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="text-xs text-slate-500">{r.type}</div>
+                    <div className="mt-2 flex items-center gap-2 text-sm">
+                      <Users className="h-4 w-4" />{r.online} online
+                    </div>
+                    <Button size="sm" className="mt-3 w-full" onClick={() => setActiveRoom(r.id)}>
+                      Åpne rom
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -181,6 +235,25 @@ export default function NordConnect() {
                     <Button onClick={() => { setActiveRoom(r.id); handleJoin(r.id); }}>Bli med</Button>
                   )}
                 </div>
+
+                {/* Info-dialog knapp */}
+                <div className="mt-3">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline">Info</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>{r.name}</DialogTitle>
+                        <DialogDescription>{r.description}</DialogDescription>
+                      </DialogHeader>
+                      <div className="text-sm text-slate-600 space-y-2">
+                        <div className="flex items-center gap-2"><Smile className="h-4 w-4" /> Inkluderende og lav terskel</div>
+                        <div className="flex items-center gap-2"><Shield className="h-4 w-4" /> Moderert for trygghet</div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
               </CardContent>
             </Card>
           ))}
@@ -199,6 +272,7 @@ export default function NordConnect() {
             <ul className="mt-2 space-y-1">
               <li><a className="hover:underline" href="#about">Om prosjektet</a></li>
               <li><a className="hover:underline" href="#rooms">Rom</a></li>
+              <li><a className="hover:underline" href="#how">Slik funker det</a></li>
             </ul>
           </div>
           <div>
@@ -213,6 +287,58 @@ export default function NordConnect() {
           © {new Date().getFullYear()} NordConnect – prototype.
         </div>
       </footer>
+
+      {/* Aktivt rom – dialog (mock) */}
+      <Dialog open={!!activeRoom} onOpenChange={(open) => !open && setActiveRoom(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{rooms.find(r => r.id === activeRoom)?.name || "Rom"}</DialogTitle>
+            <DialogDescription>Uformell prat. Kamera valgfritt. Husk å være inkluderende.</DialogDescription>
+          </DialogHeader>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="md:col-span-2 bg-slate-50 rounded-xl p-3 border">
+              <div className="text-xs text-slate-500 mb-2">Tekstchat (mock)</div>
+              <div className="space-y-2 max-h-56 overflow-auto">
+                <Bubble name="Anna" text="Hei! Hvordan går det med innleveringen?" />
+                <Bubble name="Bjørn" text="Tar en 25-min fokusøkt og så pause ☕" align="right" />
+                <Bubble name="Chen" text="Noen som vil sparre på metode-delen?" />
+              </div>
+              <div className="mt-3 flex gap-2">
+                <Input placeholder="Skriv en melding…" />
+                <Button>Send</Button>
+              </div>
+            </div>
+            <div className="bg-white rounded-xl p-3 border">
+              <div className="text-xs text-slate-500 mb-2">Deltakere (mock)</div>
+              <div className="grid grid-cols-2 gap-2">
+                {peopleInRoom(6).map((p, i) => (
+                  <div key={p + i} className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg">
+                    <Avatar className="h-7 w-7 border"><AvatarFallback>{p[0]}</AvatarFallback></Avatar>
+                    <span className="text-sm">{p}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-3 grid grid-cols-3 gap-2">
+                <Button variant="secondary"><Mic className="h-4 w-4 mr-1" />Mic</Button>
+                <Button variant="secondary"><Video className="h-4 w-4 mr-1" />Kamera</Button>
+                <Button variant="secondary"><Headphones className="h-4 w-4 mr-1" />Lyd</Button>
+              </div>
+              <Button className="mt-3 w-full" variant="outline" onClick={() => setActiveRoom(null)}>Lukk rom</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+function Bubble({ name, text, align = "left" }: { name: string; text: string; align?: "left" | "right" }) {
+  return (
+    <div className={`flex ${align === "right" ? "justify-end" : "justify-start"}`}>
+      <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm ${align === "right" ? "bg-blue-600 text-white" : "bg-white border"}`}>
+        <div className="text-[10px] opacity-70 mb-1">{name}</div>
+        <div>{text}</div>
+      </div>
     </div>
   );
 }
