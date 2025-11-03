@@ -1,18 +1,19 @@
-import React from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 type DialogCtx = { open: boolean; setOpen: (v: boolean) => void };
-const Ctx = React.createContext<DialogCtx | null>(null);
+const DialogContext = createContext<DialogCtx | null>(null);
 
-type RootProps = React.PropsWithChildren<{
+type RootProps = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-}>;
+  children: React.ReactNode;
+};
 
-/** Dialog-root: kan brukes kontrollert (open/onOpenChange) eller ukontrollert. */
+/** Root – kan brukes kontrollert (open/onOpenChange) eller ukontrollert. */
 export const Dialog: React.FC<RootProps> = ({ open, onOpenChange, children }) => {
   const controlled = typeof open === "boolean";
-  const [internal, setInternal] = React.useState(false);
+  const [internal, setInternal] = useState(false);
   const isOpen = controlled ? (open as boolean) : internal;
 
   const setOpen = (v: boolean) => {
@@ -20,8 +21,8 @@ export const Dialog: React.FC<RootProps> = ({ open, onOpenChange, children }) =>
     onOpenChange?.(v);
   };
 
-  // Lås body-scroll når åpen
-  React.useEffect(() => {
+  // Lås scroll når åpen
+  useEffect(() => {
     if (!isOpen) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -31,22 +32,27 @@ export const Dialog: React.FC<RootProps> = ({ open, onOpenChange, children }) =>
   }, [isOpen]);
 
   // Lukk på Escape
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen]);
 
-  return <Ctx.Provider value={{ open: isOpen, setOpen }}>{children}</Ctx.Provider>;
+  return (
+    <DialogContext.Provider value={{ open: isOpen, setOpen }}>
+      {children}
+    </DialogContext.Provider>
+  );
 };
 
-type TriggerProps = React.PropsWithChildren<{ asChild?: boolean }>;
+/** Trigger – åpner dialogen. */
+type TriggerProps = { asChild?: boolean; children: React.ReactElement | string };
 export const DialogTrigger: React.FC<TriggerProps> = ({ asChild = false, children }) => {
-  const ctx = React.useContext(Ctx);
+  const ctx = useContext(DialogContext);
   if (!ctx) return <>{children}</>;
 
-  const handleClick = (e: any) => {
+  const onClick = (e: any) => {
     if (React.isValidElement(children) && (children as any).props?.onClick) {
       (children as any).props.onClick(e);
     }
@@ -54,20 +60,19 @@ export const DialogTrigger: React.FC<TriggerProps> = ({ asChild = false, childre
   };
 
   if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children as React.ReactElement, { onClick: handleClick });
+    return React.cloneElement(children, { onClick });
   }
   return (
-    <button type="button" onClick={handleClick}>
+    <button type="button" onClick={onClick}>
       {children}
     </button>
   );
 };
 
+/** Content – midtstilt modal i portal. Klikk utenfor/ESC lukker. */
 type ContentProps = React.HTMLAttributes<HTMLDivElement>;
-
-/** Innholdet rendres i portal og er sentrert på skjermen. Klikk utenfor eller Esc lukker. */
 export const DialogContent: React.FC<ContentProps> = ({ className = "", children, ...rest }) => {
-  const ctx = React.useContext(Ctx);
+  const ctx = useContext(DialogContext);
   if (!ctx || !ctx.open) return null;
 
   const stop: React.MouseEventHandler<HTMLDivElement> = (e) => e.stopPropagation();
