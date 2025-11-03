@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Coffee, BookOpen, Heart, MessageCircle, Users, Sparkles, MapPin, Shield, Smile,
-  ChevronRight, PlayCircle, Bell, Mic, Video, Headphones, Search, Crown, Monitor, Globe, Clock
+  Coffee, BookOpen, Heart, MessageCircle, Users, Sparkles, MapPin, Shield,
+  Smile, PlayCircle, Bell, Mic, Video, Headphones, Search, Monitor, Globe, ChevronRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,11 +15,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 const mockUsers = ["Anna", "Bjørn", "Chen", "Dina", "Elias", "Fatima", "Gustav", "Hanna"];
 
 const initialRooms = [
-  { id: "kaffe",  icon: Coffee,      name: "Kaffepraten",        type: "Sosial sone",  description: "Uformell prat. Kom og gå som du vil.",     online: 3, tags: ["lav terskel", "uformell"] },
-  { id: "fokus",  icon: BookOpen,    name: "Fokusrom – stille",  type: "Studiesone",   description: "Pomodoro-økter og stille samskriving.",   online: 5, tags: ["studie", "fokus"] },
-  { id: "ent1002",icon: MessageCircle,name: "ENT1002 – Diskusjon",type: "Faggruppe",   description: "Spørsmål, notater, og samarbeid.",        online: 2, tags: ["fag", "gruppe"] },
-  { id: "trivsel",icon: Heart,       name: "Trivselsprat",       type: "Støtte og trivsel", description: "Trygt rom moderert av faddere.", online: 1, tags: ["trygt", "inkluderende"] },
-  { id: "oslo",   icon: MapPin,      name: "Oslo-området",       type: "Regionalt rom",description: "Møt andre i samme område.",              online: 0, tags: ["region", "nettverk"] },
+  { id: "kaffe", icon: Coffee, name: "Kaffepraten", type: "Sosial sone", description: "Uformell prat. Kom og gå som du vil.", online: 3, tags: ["lav terskel", "uformell"] },
+  { id: "fokus", icon: BookOpen, name: "Fokusrom – stille", type: "Studiesone", description: "Pomodoro-økter og stille samskriving.", online: 5, tags: ["studie", "fokus"] },
+  { id: "ent1002", icon: MessageCircle, name: "ENT1002 – Diskusjon", type: "Faggruppe", description: "Spørsmål, notater, og samarbeid.", online: 2, tags: ["fag", "gruppe"] },
+  { id: "trivsel", icon: Heart, name: "Trivselsprat", type: "Støtte og trivsel", description: "Trygt rom moderert av faddere.", online: 1, tags: ["trygt", "inkluderende"] },
+  { id: "oslo", icon: MapPin, name: "Oslo-området", type: "Regionalt rom", description: "Møt andre i samme område.", online: 0, tags: ["region", "nettverk"] },
 ];
 
 const peopleInRoom = (n: number) => {
@@ -32,17 +32,18 @@ export default function NordConnect() {
   const [query, setQuery] = useState("");
   const [activeRoom, setActiveRoom] = useState<string | null>(null);
   const [joined, setJoined] = useState<string | null>(null);
-  const [notifications] = useState<string[]>([
+  const [notifications] = useState([
     "3 er i Kaffepraten nå – bli med!",
     "Fadder-kveld i Trivselsprat kl 19:30 i dag."
   ]);
 
   const filteredRooms = useMemo(() => {
     const q = query.toLowerCase();
-    return rooms.filter(r =>
-      r.name.toLowerCase().includes(q) ||
-      r.type.toLowerCase().includes(q) ||
-      r.tags.some(t => t.toLowerCase().includes(q))
+    return rooms.filter(
+      r =>
+        r.name.toLowerCase().includes(q) ||
+        r.type.toLowerCase().includes(q) ||
+        r.tags.some(t => t.toLowerCase().includes(q))
     );
   }, [rooms, query]);
 
@@ -64,7 +65,8 @@ export default function NordConnect() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
-      {/* Topbar */}
+
+      {/* Topplinje */}
       <header className="sticky top-0 z-50 backdrop-blur bg-white/70 border-b">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -77,27 +79,24 @@ export default function NordConnect() {
             <a href="#how" className="hover:underline">Slik funker det</a>
             <a href="#rooms" className="hover:underline">Rom</a>
           </nav>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" className="hidden md:inline-flex"><Bell className="h-4 w-4 mr-2"/>Varsler</Button>
-            <Button><Globe className="h-4 w-4 mr-2"/>Logg inn med studentkonto</Button>
-      {/* Mobilmeny – vises kun på små skjermer */}
-<div className="md:hidden">
-  <Sheet>
-    <SheetTrigger asChild>
-      <Button variant="outline">Meny</Button>
-    </SheetTrigger>
-    <SheetContent side="right">
-      <SheetHeader>
-        <SheetTitle>NordConnect</SheetTitle>
-      </SheetHeader>
-      <div className="mt-6 grid gap-4">
-        <a href="#about" className="hover:underline">Om</a>
-        <a href="#how" className="hover:underline">Slik funker det</a>
-        <a href="#rooms" className="hover:underline">Rom</a>
-      </div>
-    </SheetContent>
-  </Sheet>
-</div>
+
+          {/* Mobilmeny */}
+          <div className="md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline">Meny</Button>
+              </SheetTrigger>
+              <SheetContent side="right">
+                <SheetHeader>
+                  <SheetTitle>NordConnect</SheetTitle>
+                </SheetHeader>
+                <div className="mt-6 grid gap-4">
+                  <a href="#about" className="hover:underline">Om</a>
+                  <a href="#how" className="hover:underline">Slik funker det</a>
+                  <a href="#rooms" className="hover:underline">Rom</a>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </header>
@@ -106,165 +105,81 @@ export default function NordConnect() {
       <section className="max-w-6xl mx-auto px-4 pt-12 pb-8">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div>
-            <motion.h1 initial={{opacity:0, y:8}} animate={{opacity:1,y:0}} transition={{duration:0.5}} className="text-3xl md:text-5xl font-bold leading-tight">
+            <motion.h1 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
+              className="text-3xl md:text-5xl font-bold leading-tight">
               Der nettstudenter møtes – <span className="text-blue-600">digitalt</span>
             </motion.h1>
             <p className="mt-4 text-lg text-slate-600">
-              Lavterskel, uformelt og trygt fellesskap for studenter ved Handelshøgskolen. Hopp inn i et rom når du vil – prat, studer eller bare vær til stede.
+              Lavterskel, uformelt og trygt fellesskap for studenter ved Handelshøgskolen.
+              Hopp inn i et rom når du vil – prat, studer eller bare vær til stede.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button size="lg"><PlayCircle className="h-5 w-5 mr-2"/>Bli med nå</Button>
-              <Button size="lg" variant="outline"><Monitor className="h-5 w-5 mr-2"/>Se demo</Button>
-            </div>
-
-            {/* Varsel-ticker */}
-            <div className="mt-6 flex items-center gap-2 text-sm text-slate-600">
-              <Clock className="h-4 w-4"/>
-              <div className="overflow-x-auto whitespace-nowrap">
-                {notifications.map((n, i) => (
-                  <Badge key={i} variant="secondary" className="mr-2">{n}</Badge>
-                ))}
-              </div>
+              <Button size="lg"><PlayCircle className="h-5 w-5 mr-2" />Bli med nå</Button>
+              <Button size="lg" variant="outline"><Monitor className="h-5 w-5 mr-2" />Se demo</Button>
             </div>
           </div>
-
-          {/* Mock UI Panel */}
-          <motion.div initial={{opacity:0, y:8}} animate={{opacity:1,y:0}} transition={{duration:0.6, delay:0.1}} className="bg-white rounded-2xl shadow-xl border p-4">
-            <div className="grid grid-cols-3 gap-3">
-              {rooms.slice(0,6).map((r) => (
-                <Card key={r.id} className="hover:shadow-md transition">
-                  <CardHeader className="pb-2">
-                    <div className="flex items-center gap-2">
-                      <ActiveIcon Icon={r.icon} />
-                      <CardTitle className="text-base">{r.name}</CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="text-xs text-slate-500">{r.type}</div>
-                    <div className="mt-2 flex items-center gap-2 text-sm"><Users className="h-4 w-4"/>{r.online} online</div>
-                    <Button size="sm" className="mt-3 w-full" onClick={() => setActiveRoom(r.id)}>Åpne rom</Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </motion.div>
         </div>
       </section>
 
       {/* About */}
       <section id="about" className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid md:grid-cols-3 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Coffee className="h-5 w-5"/> Lav terskel</CardTitle>
-            </CardHeader>
-            <CardContent className="text-slate-600">Kamera valgfritt, ingen prestasjonspress. Kom og gå når du vil. Små rom, trygg stemning.</CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Shield className="h-5 w-5"/> Trygge rammer</CardTitle>
-            </CardHeader>
-            <CardContent className="text-slate-600">Klare normer og moderering fra fadderteam. Rom for støtte og trivsel, ikke bare fag.</CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Sparkles className="h-5 w-5"/> Integrert i hverdagen</CardTitle>
-            </CardHeader>
-            <CardContent className="text-slate-600">Lenker fra Canvas/Teams. Varsler når venner er online. Korte, faste møtepunkter.</CardContent>
-          </Card>
+          <Card><CardHeader><CardTitle className="flex items-center gap-2"><Coffee className="h-5 w-5" /> Lav terskel</CardTitle></CardHeader><CardContent className="text-slate-600">Kamera valgfritt, ingen prestasjonspress. Kom og gå når du vil.</CardContent></Card>
+          <Card><CardHeader><CardTitle className="flex items-center gap-2"><Shield className="h-5 w-5" /> Trygge rammer</CardTitle></CardHeader><CardContent className="text-slate-600">Klare normer og moderering fra fadderteam.</CardContent></Card>
+          <Card><CardHeader><CardTitle className="flex items-center gap-2"><Sparkles className="h-5 w-5" /> Integrert i hverdagen</CardTitle></CardHeader><CardContent className="text-slate-600">Varsler når venner er online. Korte, faste møtepunkter.</CardContent></Card>
         </div>
       </section>
 
-      {/* How it works */}
-      <section id="how" className="max-w-6xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold mb-6">Slik funker det</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Globe className="h-5 w-5"/> 1. Logg inn</CardTitle>
-            </CardHeader>
-            <CardContent className="text-slate-600">Bruk studentkonto (SSO). Ingen ekstra konto eller installasjon.</CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Search className="h-5 w-5"/> 2. Velg et rom</CardTitle>
-            </CardHeader>
-            <CardContent className="text-slate-600">Kaffeprat, fokusrom, faggrupper eller regionsrom. Se hvor mange som er inne.</CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Users className="h-5 w-5"/> 3. Bli med</CardTitle>
-            </CardHeader>
-            <CardContent className="text-slate-600">Snakk, lytt, studer – med eller uten kamera. Reager, si takk, og bygg fellesskap.</CardContent>
-          </Card>
-        </div>
-      </section>
-
-      {/* Rooms explorer */}
+      {/* Rom-seksjon */}
       <section id="rooms" className="max-w-6xl mx-auto px-4 py-12">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">Utforsk rom</h2>
           <div className="flex items-center gap-2 w-full max-w-md">
-            <Input placeholder="Søk i rom, type eller tagger…" value={query} onChange={(e) => setQuery(e.target.value)} />
-            <Button variant="secondary"><ChevronRight className="h-4 w-4"/></Button>
+            <Input placeholder="Søk i rom..." value={query} onChange={(e) => setQuery(e.target.value)} />
+            <Button variant="secondary"><ChevronRight className="h-4 w-4" /></Button>
           </div>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
           {filteredRooms.map((r) => (
-            <Cardkey={r.id}className={`transition flex flex-col justify-between h-[260px] ${activeRoom === r.id ? "ring-2 ring-blue-500" : ""}`}>
+            <Card
+              key={r.id}
+              className={`transition-all duration-200 flex flex-col justify-between h-[260px] hover:shadow-lg hover:-translate-y-1 ${
+                activeRoom === r.id ? "ring-2 ring-blue-500" : ""
+              }`}
+            >
               <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <ActiveIcon Icon={r.icon} />
-                    <div>
-                      <CardTitle className="text-lg">{r.name}</CardTitle>
-                      <div className="text-xs text-slate-500">{r.type}</div>
-                    </div>
+                <div className="flex items-center gap-3">
+                  <ActiveIcon Icon={r.icon} />
+                  <div>
+                    <CardTitle className="text-lg">{r.name}</CardTitle>
+                    <div className="text-xs text-slate-500">{r.type}</div>
                   </div>
-                  <Badge variant="secondary"><Users className="h-3 w-3 mr-1 inline"/>{r.online} online</Badge>
                 </div>
               </CardHeader>
-              <CardContent>
-                <p className="text-sm text-slate-600">{r.description}</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {r.tags.map(t => (<Badge key={t} variant="outline">#{t}</Badge>))}
+
+              <CardContent className="flex flex-col justify-between flex-grow">
+                <div>
+                  <p className="text-sm text-slate-600">{r.description}</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {r.tags.map((t) => (
+                      <Badge key={t} variant="outline">
+                        #{t}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
-                <div className="mt-4 flex items-center gap-2">
-                  {peopleInRoom(r.online).slice(0,5).map((p, i) => (
-                    <Avatar key={p+i} className="h-8 w-8 border">
-                      <AvatarFallback>{p[0]}</AvatarFallback>
-                    </Avatar>
-                  ))}
-                </div>
-                <div className="mt-5 flex gap-2 flex-wrap">
+
+                <div className="mt-4 flex items-center justify-between">
+                  <Badge variant="secondary">
+                    <Users className="h-3 w-3 mr-1 inline" />
+                    {r.online} online
+                  </Badge>
                   {joined === r.id ? (
-                    <>
-                      <Button variant="outline" onClick={() => handleLeave(r.id)}><Headphones className="h-4 w-4 mr-2"/> Forlat</Button>
-                      <Button variant="secondary"><Mic className="h-4 w-4 mr-2"/> Mute</Button>
-                      <Button variant="secondary"><Video className="h-4 w-4 mr-2"/> Kamera</Button>
-                    </>
+                    <Button variant="outline" onClick={() => handleLeave(r.id)}>Forlat</Button>
                   ) : (
-                    <Button onClick={() => { setActiveRoom(r.id); handleJoin(r.id); }}>
-                      <PlayCircle className="h-4 w-4 mr-2"/> Bli med
-                    </Button>
+                    <Button onClick={() => { setActiveRoom(r.id); handleJoin(r.id); }}>Bli med</Button>
                   )}
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="outline"><InfoIcon/> Info</Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>{r.name}</DialogTitle>
-                        <DialogDescription>{r.description}</DialogDescription>
-                      </DialogHeader>
-                      <div className="text-sm text-slate-600 space-y-2">
-                        <div className="flex items-center gap-2"><Smile className="h-4 w-4"/> Inkluderende og lav terskel</div>
-                        <div className="flex items-center gap-2"><Crown className="h-4 w-4"/> Vertskap: Fadderteam</div>
-                        <div className="flex items-center gap-2"><Shield className="h-4 w-4"/> Moderert for trygghet</div>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
                 </div>
               </CardContent>
             </Card>
@@ -273,92 +188,4 @@ export default function NordConnect() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t">
-        <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm text-slate-600">
-          <div>
-            <div className="font-semibold text-slate-800">NordConnect</div>
-            <p className="mt-2">Den digitale studentstua for deg som studerer på nett.</p>
-          </div>
-          <div>
-            <div className="font-semibold text-slate-800">Lenker</div>
-            <ul className="mt-2 space-y-1">
-              <li><a className="hover:underline" href="#about">Om prosjektet</a></li>
-              <li><a className="hover:underline" href="#rooms">Rom</a></li>
-              <li><a className="hover:underline" href="#how">Slik funker det</a></li>
-            </ul>
-          </div>
-          <div>
-            <div className="font-semibold text-slate-800">Kontakt</div>
-            <ul className="mt-2 space-y-1">
-              <li>Studentteamet @ Handelshøgskolen</li>
-              <li>personvern@nordconnect.example</li>
-            </ul>
-          </div>
-        </div>
-        <div className="text-center text-xs text-slate-400 pb-6">© {new Date().getFullYear()} NordConnect – prototype.</div>
-      </footer>
-
-      {/* Active Room Overlay (mock) */}
-      <Dialog open={!!activeRoom} onOpenChange={(open) => !open && setActiveRoom(null)}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>{rooms.find(r => r.id === activeRoom)?.name || "Rom"}</DialogTitle>
-            <DialogDescription>Uformell prat. Kamera valgfritt. Husk å være inkluderende.</DialogDescription>
-          </DialogHeader>
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="md:col-span-2 bg-slate-50 rounded-xl p-3 border">
-              <div className="text-xs text-slate-500 mb-2">Tekstchat (mock)</div>
-              <div className="space-y-2 max-h-56 overflow-auto">
-                <Bubble name="Anna" text="Hei! Hvordan går det med innleveringen?"/>
-                <Bubble name="Bjørn" text="Tar en 25-min fokusøkt og så pause ☕" align="right"/>
-                <Bubble name="Chen" text="Noen som vil sparre på metode-delen?"/>
-              </div>
-              <div className="mt-3 flex gap-2">
-                <Input placeholder="Skriv en melding…"/>
-                <Button>Send</Button>
-              </div>
-            </div>
-            <div className="bg-white rounded-xl p-3 border">
-              <div className="text-xs text-slate-500 mb-2">Deltakere (mock)</div>
-              <div className="grid grid-cols-2 gap-2">
-                {peopleInRoom(6).map((p, i) => (
-                  <div key={p+i} className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg">
-                    <Avatar className="h-7 w-7 border"><AvatarFallback>{p[0]}</AvatarFallback></Avatar>
-                    <span className="text-sm">{p}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-3 grid grid-cols-3 gap-2">
-                <Button variant="secondary"><Mic className="h-4 w-4 mr-1"/>Mic</Button>
-                <Button variant="secondary"><Video className="h-4 w-4 mr-1"/>Kamera</Button>
-                <Button variant="secondary"><Headphones className="h-4 w-4 mr-1"/>Lyd</Button>
-              </div>
-              <Button className="mt-3 w-full" variant="outline" onClick={() => setActiveRoom(null)}>Lukk rom</Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-}
-
-function Bubble({ name, text, align = "left" }: { name: string; text: string; align?: "left" | "right" }) {
-  return (
-    <div className={`flex ${align === "right" ? "justify-end" : "justify-start"}`}>
-      <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm ${align === "right" ? "bg-blue-600 text-white" : "bg-white border"}`}>
-        <div className="text-[10px] opacity-70 mb-1">{name}</div>
-        <div>{text}</div>
-      </div>
-    </div>
-  );
-}
-
-function InfoIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4">
-      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      <line x1="12" y1="10" x2="12" y2="16" stroke="currentColor" strokeWidth="1.5" />
-      <circle cx="12" cy="7" r="1" fill="currentColor" />
-    </svg>
-  );
-}
+      <footer class
