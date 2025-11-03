@@ -1,0 +1,1 @@
+export const Avatar=({...p}:any)=>(<div className='inline-flex items-center justify-center rounded-full bg-slate-200 h-8 w-8' {...p}/>); export const AvatarFallback=({...p}:any)=>(<span className='text-xs font-medium text-slate-700' {...p}/>)

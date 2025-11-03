@@ -1,0 +1,1 @@
+export const Badge=({...p}:any)=>(<span className='inline-flex items-center px-2 py-0.5 rounded-xl text-xs bg-slate-100 text-slate-700' {...p}/>)

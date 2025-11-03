@@ -1,0 +1,1 @@
+export const Card=({...p}:any)=>(<div className='rounded-2xl border bg-white shadow-sm' {...p}/>); export const CardHeader=({...p}:any)=>(<div className='p-5 border-b' {...p}/>); export const CardTitle=({...p}:any)=>(<div className='text-lg font-semibold' {...p}/>); export const CardContent=({...p}:any)=>(<div className='p-5' {...p}/>)
