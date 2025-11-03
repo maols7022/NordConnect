@@ -1,6 +1,10 @@
-import React from 'react'
-import NordConnect from './NordConnect'
+import React from "react";
+import NordConnect from "./NordConnect";
 
 export default function App() {
-  return <NordConnect />
+  return (
+    <div className="font-sans">
+      <NordConnect />
+    </div>
+  );
 }
