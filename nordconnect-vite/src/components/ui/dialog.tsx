@@ -82,12 +82,16 @@ export const DialogContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
       {/* Mørk bakgrunn som fanger klikk */}
       <div className="fixed inset-0 bg-black/40" />
       {/* Selve panelet */}
-      <div
-        className={`relative z-10 mx-auto mt-24 w-[min(90vw,48rem)] rounded-2xl border bg-white p-4 shadow-xl ${className}`}
-        onClick={stop}
-        {...p}
-      />
-    </div>
+<div
+  className={`fixed inset-0 flex items-center justify-center z-10`}
+  onClick={stop}
+>
+  <div
+    className={`w-[min(90vw,48rem)] rounded-2xl border bg-white p-6 shadow-xl ${className}`}
+    {...p}
+  />
+</div>
+
   );
 
   // Render i portal til body
