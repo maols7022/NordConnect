@@ -188,4 +188,31 @@ export default function NordConnect() {
       </section>
 
       {/* Footer */}
-      <footer class
+      <footer className="border-t">
+        <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm text-slate-600">
+          <div>
+            <div className="font-semibold text-slate-800">NordConnect</div>
+            <p className="mt-2">Den digitale studentstua for deg som studerer på nett.</p>
+          </div>
+          <div>
+            <div className="font-semibold text-slate-800">Lenker</div>
+            <ul className="mt-2 space-y-1">
+              <li><a className="hover:underline" href="#about">Om prosjektet</a></li>
+              <li><a className="hover:underline" href="#rooms">Rom</a></li>
+            </ul>
+          </div>
+          <div>
+            <div className="font-semibold text-slate-800">Kontakt</div>
+            <ul className="mt-2 space-y-1">
+              <li>Studentteamet @ Handelshøgskolen</li>
+              <li>personvern@nordconnect.example</li>
+            </ul>
+          </div>
+        </div>
+        <div className="text-center text-xs text-slate-400 pb-6">
+          © {new Date().getFullYear()} NordConnect – prototype.
+        </div>
+      </footer>
+    </div>
+  );
+}
